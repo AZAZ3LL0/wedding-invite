@@ -1,9 +1,26 @@
 <script lang="ts">
+	import { images } from '$lib/content/generated/images';
 	import type { HeroProps, Resolved } from '$lib/content';
 	import Picture from './Picture.svelte';
 
 	let { props }: { props: Resolved<HeroProps> } = $props();
+
+	const asset = $derived(images[props.image]);
 </script>
+
+<!-- The LCP image is the only thing worth preloading: the preload scanner finds it in
+     the head, before it has parsed its way down to the markup. Fonts are not preloaded
+     on purpose, they swap in and would only take bandwidth from this request. -->
+<svelte:head>
+	<link
+		rel="preload"
+		as="image"
+		type="image/avif"
+		imagesrcset={asset.avif}
+		imagesizes="100vw"
+		fetchpriority="high"
+	/>
+</svelte:head>
 
 <!-- The hero image is the LCP element: eager, high priority, no entrance animation. -->
 <section class="hero">

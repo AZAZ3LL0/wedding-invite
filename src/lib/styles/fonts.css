@@ -1,8 +1,12 @@
 /*
- * Self hosted variable fonts, cyrillic and latin subsets only, per tech.md section 12.
- * The unicode-range split keeps a latin-only visitor from downloading the cyrillic file
- * and the other way round. font-display: swap so text paints on the fallback first and
- * the hero never waits on a font.
+ * Self hosted variable fonts, per tech.md section 12. font-display: swap so text paints
+ * on the fallback immediately and the hero never waits on a font.
+ *
+ * The latin files are cut down to the characters a Russian page actually renders:
+ * digits, punctuation, guillemets and ascii. The full latin subsets cost 62 KB between
+ * them and were loading on every page, because «» and the times in the programme fall
+ * in that range. A character outside the range below falls through to the next family
+ * in the stack rather than blocking on a download.
  */
 
 @font-face {
@@ -21,8 +25,8 @@
 	font-display: swap;
 	src: url('/fonts/cormorant-garamond-latin.woff2') format('woff2');
 	unicode-range:
-		U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
-		U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+		U+20-26, U+28-5B, U+5D, U+5F, U+61-7A, U+AB, U+B0, U+BB, U+D7, U+2013, U+2018-2019, U+201C-201E,
+		U+2026, U+20BD, U+2116;
 }
 
 @font-face {
@@ -41,6 +45,6 @@
 	font-display: swap;
 	src: url('/fonts/manrope-latin.woff2') format('woff2');
 	unicode-range:
-		U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
-		U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+		U+20-26, U+28-5B, U+5D, U+5F, U+61-7A, U+AB, U+B0, U+BB, U+D7, U+2013, U+2018-2019, U+201C-201E,
+		U+2026, U+20BD, U+2116;
 }

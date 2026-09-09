@@ -2,6 +2,10 @@ services:
   postgres:
     image: postgres:16
     restart: unless-stopped
+    ports:
+      # Bound to the loopback so migrations and seeds run from the host during
+      # development. On the VPS the port stays unreachable from outside the machine.
+      - '127.0.0.1:5432:5432'
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-wedding}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-wedding}
