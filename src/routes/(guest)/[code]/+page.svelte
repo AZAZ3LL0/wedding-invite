@@ -35,7 +35,7 @@
 
 <main>
 	{#each blocks as block (block.id)}
-		<BlockRenderer {block} personalNote={invite.personalNote} />
+		<BlockRenderer {block} greetingName={invite.greetingName} personalNote={invite.personalNote} />
 	{/each}
 
 	<section id="rsvp" class="block">

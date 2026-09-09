@@ -12,11 +12,13 @@
 
 	interface Props {
 		block: ResolvedBlock;
+		/** The invitation block addresses the guest by name. */
+		greetingName: string;
 		/** Only the invitation block uses it, but the renderer is the one place that has it. */
 		personalNote: string | null;
 	}
 
-	let { block, personalNote }: Props = $props();
+	let { block, greetingName, personalNote }: Props = $props();
 </script>
 
 {#if block.component === 'hero'}
@@ -25,7 +27,7 @@
 	<section id={block.id} class="block">
 		<Reveal>
 			{#if block.component === 'invitation'}
-				<InvitationBlock props={block.props} {personalNote} />
+				<InvitationBlock props={block.props} {greetingName} {personalNote} />
 			{:else if block.component === 'timeline'}
 				<TimelineBlock props={block.props} />
 			{:else if block.component === 'loveStory'}

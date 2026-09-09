@@ -4,14 +4,18 @@
 
 	interface Props {
 		props: Resolved<InvitationProps>;
+		/** Who this link is addressed to. Comes from the invite, not from content. */
+		greetingName: string;
 		/** Paragraph written for this one link. Comes from the invite, not from content. */
 		personalNote: string | null;
 	}
 
-	let { props, personalNote }: Props = $props();
+	let { props, greetingName, personalNote }: Props = $props();
 </script>
 
-<h2>{props.title}</h2>
+<!-- The content module sets the tone, the invite supplies the name. -->
+<p class="eyebrow">{props.title}</p>
+<h2>{greetingName}</h2>
 <p class="lead">{props.lead}</p>
 {#each props.paragraphs as paragraph (paragraph)}
 	<p>{paragraph}</p>
@@ -26,6 +30,10 @@
 <p class="signature">{props.signature}</p>
 
 <style>
+	h2 {
+		margin-top: var(--space-2);
+	}
+
 	.lead {
 		font-family: var(--font-display);
 		font-size: var(--text-md);
