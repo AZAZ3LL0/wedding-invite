@@ -48,9 +48,12 @@ async function encode(
 	const file = `${name}-${width}.${variant.extension}`;
 	const pipeline = sharp(source).resize({ width, withoutEnlargement: true });
 	// AVIF earns its slow encode here: the files are built once and served forever.
-	if (variant.format === 'avif') await pipeline.avif({ quality: 52, effort: 6 }).toFile(join(OUTPUT_DIR, file));
-	if (variant.format === 'webp') await pipeline.webp({ quality: 74 }).toFile(join(OUTPUT_DIR, file));
-	if (variant.format === 'jpeg') await pipeline.jpeg({ quality: 78, mozjpeg: true }).toFile(join(OUTPUT_DIR, file));
+	if (variant.format === 'avif')
+		await pipeline.avif({ quality: 52, effort: 6 }).toFile(join(OUTPUT_DIR, file));
+	if (variant.format === 'webp')
+		await pipeline.webp({ quality: 74 }).toFile(join(OUTPUT_DIR, file));
+	if (variant.format === 'jpeg')
+		await pipeline.jpeg({ quality: 78, mozjpeg: true }).toFile(join(OUTPUT_DIR, file));
 	return `/img/${file} ${width}w`;
 }
 
@@ -81,7 +84,6 @@ async function run(): Promise<void> {
 			}
 		}
 
-		const largest = widths[widths.length - 1];
 		manifest[name] = {
 			width: meta.width,
 			height: meta.height,

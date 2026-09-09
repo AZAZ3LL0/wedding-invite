@@ -7,3 +7,4 @@ test-results
 playwright-report
 tech.md
 CLAUDE.md
+src/lib/content/generated
