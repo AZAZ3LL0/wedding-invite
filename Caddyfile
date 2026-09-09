@@ -1,0 +1,13 @@
+{$SITE_DOMAIN} {
+	encode zstd gzip
+
+	# The invitation links are private and must not end up in a search index.
+	header {
+		X-Robots-Tag "noindex, nofollow"
+		Referrer-Policy "same-origin"
+		X-Content-Type-Options "nosniff"
+		-Server
+	}
+
+	reverse_proxy app:3000
+}
