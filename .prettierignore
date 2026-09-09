@@ -5,3 +5,5 @@ drizzle
 pnpm-lock.yaml
 test-results
 playwright-report
+tech.md
+CLAUDE.md

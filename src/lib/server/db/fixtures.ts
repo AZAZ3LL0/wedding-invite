@@ -1,4 +1,11 @@
-import type { AgeGroup, Audience, AddressForm, GuestOrigin, PlusOnePolicy, RsvpStatus } from '$lib/types';
+import type {
+	AgeGroup,
+	Audience,
+	AddressForm,
+	GuestOrigin,
+	PlusOnePolicy,
+	RsvpStatus
+} from '$lib/types';
 
 /**
  * One fixture set for the seed script, the fake Telegram client and the tests.
@@ -254,4 +261,8 @@ export const questionFixtures: QuestionFixture[] = [
 
 export const chatFixtures = inviteFixtures
 	.filter((invite): invite is InviteFixture & { chat: ChatFixture } => invite.chat !== null)
-	.map((invite) => ({ ...invite.chat, inviteCode: invite.code, greetingName: invite.greetingName }));
+	.map((invite) => ({
+		...invite.chat,
+		inviteCode: invite.code,
+		greetingName: invite.greetingName
+	}));

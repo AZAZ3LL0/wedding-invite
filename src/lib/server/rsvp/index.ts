@@ -13,8 +13,7 @@ export const setRsvpInput = z.object({
 export type SetRsvpInput = z.infer<typeof setRsvpInput>;
 
 export type SetRsvpResult =
-	| { ok: true; status: RsvpStatus }
-	| { ok: false; reason: 'not_found' | 'locked' };
+	{ ok: true; status: RsvpStatus } | { ok: false; reason: 'not_found' | 'locked' };
 
 /**
  * Sets one guest's answer. Ownership of the guest by the invite from the URL is

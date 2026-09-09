@@ -69,7 +69,10 @@ export type AdminNotifyPayload = z.infer<typeof adminNotifyPayload>;
 export type DemoPingPayload = z.infer<typeof demoPingPayload>;
 
 /** Retry policy per topic, straight from tech.md section 6.1. */
-export const retryPolicy: Record<QueueName, { retryLimit: number; retryBackoff: boolean; expireInSeconds?: number }> = {
+export const retryPolicy: Record<
+	QueueName,
+	{ retryLimit: number; retryBackoff: boolean; expireInSeconds?: number }
+> = {
 	[QUEUES.remindersScan]: { retryLimit: 3, retryBackoff: true },
 	[QUEUES.remindersSend]: { retryLimit: 5, retryBackoff: true, expireInSeconds: 300 },
 	[QUEUES.telegramSend]: { retryLimit: 5, retryBackoff: true },

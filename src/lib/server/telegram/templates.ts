@@ -24,7 +24,8 @@ const templates: Record<TemplateId, Template> = {
 	link_confirm: (p) => `${p.greetingName}, приглашение привязано. Статус: ${p.statusLine}.`,
 	rsvp_m1: (p) => `${p.greetingName}, до свадьбы месяц. Подтвердите участие: ${p.link}`,
 	rsvp_w1: (p) => `${p.greetingName}, до свадьбы неделя. Ждём ответ: ${p.link}`,
-	rsvp_final: (p) => `${p.greetingName}, список гостей закрывается. Ответьте, пожалуйста: ${p.link}`,
+	rsvp_final: (p) =>
+		`${p.greetingName}, список гостей закрывается. Ответьте, пожалуйста: ${p.link}`,
 	day_before: (p) => `${p.greetingName}, завтра начало в ${p.time}, адрес: ${p.address}.`,
 	admin_alert: (p) => `Событие: ${p.type}. Приглашение ${p.inviteCode}. ${p.summary}`
 };

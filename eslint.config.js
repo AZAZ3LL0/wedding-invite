@@ -17,15 +17,29 @@ export default ts.config(
 		},
 		rules: {
 			'@typescript-eslint/no-explicit-any': 'error',
+			// Guest pages link out to maps and to Telegram. Route navigation still goes
+			// through the resolve check.
+			'svelte/no-navigation-without-resolve': ['error', { ignoreLinks: true }]
+		}
+	},
+	{
+		// Server code must not reach the browser bundle. SvelteKit blocks $lib/server
+		// imports from client modules; this rule catches relative escapes as well.
+		files: ['src/**/*.ts', 'src/**/*.svelte'],
+		ignores: [
+			'src/lib/server/**',
+			'src/hooks.server.ts',
+			'src/**/*.server.ts',
+			'src/**/+server.ts'
+		],
+		rules: {
 			'no-restricted-imports': [
 				'error',
 				{
 					patterns: [
 						{
-							// Server code must never reach the browser bundle. SvelteKit enforces
-							// this for $lib/server, this rule catches relative escapes too.
 							group: ['**/lib/server/**', '**/server/db/**'],
-							message: 'Import server code through $lib/server/* from server modules only.'
+							message: 'Server modules stay on the server. Pass data through load and actions.'
 						}
 					]
 				}

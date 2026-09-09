@@ -1,0 +1,86 @@
+@import './tokens.css';
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	margin: 0;
+	background: var(--linen);
+	color: var(--ink);
+	font-family: var(--font-body);
+	font-size: var(--text-base);
+	line-height: 1.6;
+	text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3 {
+	font-family: var(--font-display);
+	font-weight: 300;
+	line-height: 1.15;
+	margin: 0 0 var(--space-4);
+}
+
+h1 {
+	font-size: var(--text-2xl);
+}
+h2 {
+	font-size: var(--text-xl);
+}
+h3 {
+	font-size: var(--text-lg);
+}
+
+p {
+	margin: 0 0 var(--space-4);
+	max-width: var(--measure);
+}
+
+a {
+	color: var(--sage-900);
+	text-underline-offset: 3px;
+}
+
+.eyebrow {
+	font-family: var(--font-utility);
+	font-size: var(--text-xs);
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--sage-500);
+}
+
+.tnum {
+	font-feature-settings: 'tnum';
+}
+
+:where(button, a, input, select, textarea):focus-visible {
+	outline: 2px solid var(--sage-900);
+	outline-offset: 2px;
+}
+
+.visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.001ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.001ms !important;
+	}
+}
