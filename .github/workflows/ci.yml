@@ -67,6 +67,14 @@ jobs:
       - name: Integration tests
         run: pnpm test:integration
 
+      - name: Worker picks the demo job up
+        timeout-minutes: 2
+        run: |
+          timeout 45s pnpm worker > worker.log 2>&1 || true
+          cat worker.log
+          grep -q 'worker ready' worker.log
+          grep -q 'demo.ping. worker started' worker.log
+
       - name: Build
         run: pnpm build
 
