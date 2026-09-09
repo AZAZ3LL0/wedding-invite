@@ -58,6 +58,7 @@ jobs:
         run: pnpm db:migrate
 
       - name: Check the schema matches the migrations
+        timeout-minutes: 2
         run: pnpm db:generate --name ci_drift_check && git diff --exit-code drizzle
 
       - name: Unit tests
