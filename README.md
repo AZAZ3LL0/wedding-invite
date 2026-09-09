@@ -42,3 +42,29 @@ pnpm worker
 ## Деплой
 
 VPS держит `docker compose` с сервисами `postgres`, `migrate`, `app`, `worker`, `caddy`. Workflow `Deploy` запускается после зелёного CI на `main` и требует секретов `VPS_HOST`, `VPS_USER`, `VPS_SSH_KEY`, `VPS_APP_DIR`, `PUBLIC_URL`, необязательного `VPS_PORT`.
+
+### Первый запуск на сервере
+
+```
+git clone git@github.com:AZAZ3LL0/wedding-invite.git /srv/wedding-invite
+cd /srv/wedding-invite
+cp .env.example .env
+```
+
+В `.env` заполняются `DATABASE_URL`, `ORIGIN`, даты и секреты бота. Туда же дописываются переменные инфраструктуры, которых нет в прикладном конфиге:
+
+```
+SITE_DOMAIN=example.ru
+POSTGRES_USER=wedding
+POSTGRES_PASSWORD=<длинный пароль>
+POSTGRES_DB=wedding
+```
+
+`DATABASE_URL` указывает на хост `postgres` внутри сети compose: `postgres://wedding:<пароль>@postgres:5432/wedding`. Дальше:
+
+```
+docker compose up -d --build
+docker compose logs -f app worker
+```
+
+Миграции применяет сервис `migrate` до старта `app` и `worker`. Проверка живости — `https://<домен>/api/health`.
