@@ -33,7 +33,9 @@ services:
       migrate:
         condition: service_completed_successfully
     healthcheck:
-      test: ['CMD-SHELL', 'wget -qO- http://localhost:3000/api/health | grep -q ''"status":"ok"''']
+      # 127.0.0.1, not localhost: inside the container localhost resolves to ::1 while
+      # adapter-node listens on 0.0.0.0, which left the container permanently unhealthy.
+      test: ['CMD-SHELL', 'wget -qO- http://127.0.0.1:3000/api/health | grep -q ''"status":"ok"''']
       interval: 15s
       timeout: 5s
       retries: 5
