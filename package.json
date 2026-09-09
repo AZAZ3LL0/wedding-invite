@@ -1,0 +1,26 @@
+{
+	"name": "wedding-invite",
+	"private": true,
+	"version": "0.0.1",
+	"type": "module",
+	"engines": {
+		"node": ">=22"
+	},
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview",
+		"worker": "tsx worker/index.ts",
+		"prepare": "svelte-kit sync || echo ''",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"lint": "prettier --check . && eslint .",
+		"format": "prettier --write .",
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"test:e2e": "playwright test",
+		"db:generate": "drizzle-kit generate",
+		"db:migrate": "tsx src/lib/server/db/migrate.ts",
+		"db:seed": "tsx src/lib/server/db/seed.ts"
+	}
+}
