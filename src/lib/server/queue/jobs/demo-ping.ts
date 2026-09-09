@@ -1,8 +1,8 @@
 import type PgBoss from 'pg-boss';
 import { demoPingPayload, QUEUES } from '../contracts';
 
-// SPEC GAP: demo job that proves the worker picks work up end to end. It is removed
-// when the reminder slice replaces it in stage 4.
+// Proves the worker picks work up end to end, see tech.md section 6.1. Removed when
+// the reminder slice replaces it in stage 4.
 
 export interface DemoPingRecord {
 	at: string;

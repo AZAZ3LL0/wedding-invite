@@ -37,8 +37,8 @@ export const adminNotifyPayload = z.object({
 	summary: z.string().min(1)
 });
 
-// SPEC GAP: stage 0 needs a job the worker can actually run before the reminder
-// slice exists. Remove together with this schema once stage 4 lands.
+// Temporary stage 0 topic, see tech.md section 6.1. Removed with this schema once
+// the reminder slice lands in stage 4.
 export const demoPingPayload = z.object({
 	at: z.iso.datetime({ offset: true }),
 	note: z.string().min(1).max(200)

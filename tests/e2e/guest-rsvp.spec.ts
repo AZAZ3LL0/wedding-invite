@@ -10,6 +10,12 @@ test('an unknown code is a 404', async ({ page }) => {
 	expect(response?.status()).toBe(404);
 });
 
+test('health answers in the shape the deploy reads', async ({ request }) => {
+	const response = await request.get('/api/health');
+	expect(response.status()).toBe(200);
+	expect(await response.json()).toEqual({ status: 'ok', db: 'up' });
+});
+
 test('the root page has no public entrance', async ({ page }) => {
 	const response = await page.goto('/');
 	expect(response?.status()).toBe(404);
