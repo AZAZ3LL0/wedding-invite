@@ -1,10 +1,11 @@
 # tech.md — ядро проекта «Сайт-приглашение на свадьбу»
 
-**Версия ядра: v2**
+**Версия ядра: v3**
 
 Changelog:
 - v1 — первичная фиксация: стек, схема БД, контракты очереди и Telegram, типы, список UI-примитивов, дизайн-токены, стратегия тестов, дорожная карта.
 - v2 — закрыты три разрыва стадии 0: временный топик `demo.ping` (§6.1), формат ответа `GET /api/health` (§10), переменные окружения инфраструктуры отдельно от прикладного конфига (§14).
+- v3 — закрыты два разрыва стадии 1: форма аргумента хелпера `t(copy, addressForm)` (§4.4), пропсы контентных блоков (§8.1).
 
 Правила файла: источник истины для всего проекта. Меняется только append-only, каждое изменение контракта (схема БД, payload джоба, публичный тип, формат роута) бампает версию и добавляет строку в changelog. Код, который противоречит этому файлу, не мёржится.
 
@@ -130,6 +131,18 @@ drizzle/                    сгенерированные миграции
 `invites.category ∈ ('family','friends','colleagues')`. Каждый контент-блок объявляет `audience: Audience[]`. Фильтрация происходит **на сервере в `load`**: в HTML не попадают блоки чужой аудитории. Клиентское скрытие запрещено.
 
 `invites.addressForm ∈ ('ty','vy')` управляет обращением. Все тексты хранятся парами форм либо пишутся нейтрально; выбор формы делает хелпер `t(copy, addressForm)`, а не условия в разметке.
+
+Текст в контенте имеет тип `Copy`:
+
+```ts
+export type Copy = string | { ty: string; vy: string };
+
+export function t(copy: Copy, addressForm: AddressForm): string;
+```
+
+Нейтральная фраза остаётся строкой, пару форм заводят только там, где обращение действительно меняет текст. Причина: пара на каждую строку удваивает объём правок и провоцирует расхождение между формами.
+
+Форму выбирает сервер. `load` прогоняет пропсы блока через `resolveCopy(props, addressForm)`, который рекурсивно заменяет каждую пару выбранной строкой, поэтому неиспользованная форма не уезжает клиенту вместе с данными страницы. Тип результата — `Resolved<P>`: та же форма пропсов, где каждый `Copy` стал `string`. Вызывать `t()` в разметке запрещено, компонент получает уже плоские строки.
 
 ### 4.5 Статусы RSVP
 
@@ -317,6 +330,68 @@ export interface ContentBlock {
 Блоки: `hero`, `countdown`, `invitation`, `timeline`, `loveStory`, `dressCode`, `venue`, `faq`, `rsvp`, `contacts`.
 
 Пример сегментации: `timeline` для `family` содержит утро невесты и ЗАГС, для `friends` — начинается со сбора гостей; `dressCode` для `colleagues` мягче по формулировкам. Разные версии — разные блоки с разной `audience`, а не условия внутри компонента.
+
+Порядок массива блоков — порядок чтения страницы. Фильтр по аудитории только удаляет, он не переставляет. `id` уникален по всему сайту и служит якорем секции.
+
+### 8.1 Пропсы блоков
+
+`ContentBlock.props` выше — верхняя граница типа, а не рабочий контракт. Конкретный блок объявляется через `Block<C, P>`, который сужает `component` и `props` вместе, поэтому блок не может назваться таймлайном и нести пропсы FAQ. Все пропсы описываются `type`-алиасами: интерфейс не присваивается к `Record<string, unknown>`.
+
+```ts
+type HeroProps = {
+  eyebrow: Copy;
+  names: string;
+  date: string;      // «12 июня 2027, суббота»
+  dateTime: string;  // ISO со смещением, для <time datetime>
+  place: string;
+  image: ImageName;
+  imageAlt: string;
+};
+
+type InvitationProps = {
+  title: Copy;
+  lead: Copy;
+  paragraphs: Copy[];
+  signature: string;
+};
+
+type TimelineEntry = { time: string; title: string; note?: string; mapUrl?: string };
+type TimelineProps = { title: Copy; intro?: Copy; entries: TimelineEntry[] };
+
+type LoveStoryChapter = {
+  id: string;
+  year: string;
+  title: string;
+  text: Copy;
+  image?: ImageName;
+  imageAlt?: string;
+};
+type LoveStoryProps = { title: Copy; chapters: LoveStoryChapter[] };
+
+type DressCodeProps = { title: Copy; text: Copy; colors: PaletteColor[]; avoid?: Copy };
+
+type VenueProps = {
+  title: Copy;
+  name: string;
+  address: string;
+  mapUrl: string;
+  mapImage: ImageName;
+  mapAlt: string;
+  notes: Copy[];
+};
+
+type FaqItem = { id: string; question: Copy; answer: Copy };
+type FaqProps = { title: Copy; items: FaqItem[] };
+
+type ContactPerson = { name: string; role: string; phone: string; telegram?: string };
+type ContactsProps = { title: Copy; lead: Copy; people: ContactPerson[] };
+```
+
+Правила:
+
+- Персональные данные приглашения в пропсы не попадают. `greetingName` и `personalNote` приходят из `InviteView` и передаются блоку отдельными пропсами: контент общий для всей категории, приглашение — нет.
+- `ImageName` — ключ сгенерированного манифеста `lib/content/generated/images.ts`. Строковый путь к картинке в пропсах запрещён, иначе сборка не заметит пропажу файла.
+- Пропсы блоков `countdown` и `rsvp` из списка выше пока не зафиксированы. Они появляются здесь вместе со стадией, которая их вводит, и бампают версию ядра.
 
 ---
 

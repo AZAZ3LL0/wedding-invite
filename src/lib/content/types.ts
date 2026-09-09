@@ -3,13 +3,12 @@ import type { PaletteColor } from '$lib/ui/types';
 import type { ImageName } from './generated/images';
 
 /**
- * Content as code, per tech.md section 8. ContentBlock below is the shape the core
- * fixes; everything under it narrows `component` and `props` so a block cannot claim
- * to be a timeline and carry FAQ props.
+ * Content as code, per tech.md sections 8 and 8.1. ContentBlock is the upper bound
+ * the core fixes; every block below narrows `component` and `props` together, so a
+ * block cannot claim to be a timeline and carry FAQ props.
  *
- * SPEC GAP: tech.md section 8 types props as Record<string, unknown> and does not
- * fix the props of each block. The shapes below are the proposed contract for the
- * stage 1 blocks. They stay here until the core is bumped to v3.
+ * Props are type aliases rather than interfaces on purpose: an interface is not
+ * assignable to Record<string, unknown>, so ContentBlock would stop constraining them.
  */
 
 export type BlockComponent =
@@ -32,11 +31,9 @@ export interface ContentBlock {
 }
 
 /**
- * A text that reads differently under `ты` and `вы`. Neutral text stays a plain
- * string, so only the sentences that actually change carry both forms.
- *
- * SPEC GAP: tech.md section 4.4 names the helper `t(copy, addressForm)` but does not
- * fix the shape of `copy`. This pair is the proposed form.
+ * A text that reads differently under `ты` and `вы`, per tech.md section 4.4. Neutral
+ * text stays a plain string, so only the sentences that actually change carry both
+ * forms: a pair on every line doubles the edit and lets the two drift apart.
  */
 export type Copy = string | { ty: string; vy: string };
 
