@@ -1,0 +1,50 @@
+/*
+ * Self hosted variable fonts, per tech.md section 12. font-display: swap so text paints
+ * on the fallback immediately and the hero never waits on a font.
+ *
+ * The latin files are cut down to the characters a Russian page actually renders:
+ * digits, punctuation, guillemets and ascii. The full latin subsets cost 62 KB between
+ * them and were loading on every page, because «» and the times in the programme fall
+ * in that range. A character outside the range below falls through to the next family
+ * in the stack rather than blocking on a download.
+ */
+
+@font-face {
+	font-family: 'Cormorant Garamond';
+	font-style: normal;
+	font-weight: 300 500;
+	font-display: swap;
+	src: url('/fonts/cormorant-garamond-cyrillic.woff2') format('woff2');
+	unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+	font-family: 'Cormorant Garamond';
+	font-style: normal;
+	font-weight: 300 500;
+	font-display: swap;
+	src: url('/fonts/cormorant-garamond-latin.woff2') format('woff2');
+	unicode-range:
+		U+20-26, U+28-5B, U+5D, U+5F, U+61-7A, U+AB, U+B0, U+BB, U+D7, U+2013, U+2018-2019, U+201C-201E,
+		U+2026, U+20BD, U+2116;
+}
+
+@font-face {
+	font-family: 'Manrope';
+	font-style: normal;
+	font-weight: 400 700;
+	font-display: swap;
+	src: url('/fonts/manrope-cyrillic.woff2') format('woff2');
+	unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+	font-family: 'Manrope';
+	font-style: normal;
+	font-weight: 400 700;
+	font-display: swap;
+	src: url('/fonts/manrope-latin.woff2') format('woff2');
+	unicode-range:
+		U+20-26, U+28-5B, U+5D, U+5F, U+61-7A, U+AB, U+B0, U+BB, U+D7, U+2013, U+2018-2019, U+201C-201E,
+		U+2026, U+20BD, U+2116;
+}

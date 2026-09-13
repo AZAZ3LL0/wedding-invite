@@ -1,0 +1,23 @@
+{
+	"ci": {
+		"collect": {
+			"url": ["http://localhost:4173/FAM4SEAT01", "http://localhost:4173/CWRKSEATR6"],
+			"numberOfRuns": 3,
+			"startServerCommand": "pnpm preview --port 4173",
+			"startServerReadyPattern": "Local",
+			"startServerReadyTimeout": 60000
+		},
+		"assert": {
+			"assertions": {
+				"largest-contentful-paint": ["error", { "maxNumericValue": 2000 }],
+				"cumulative-layout-shift": ["error", { "maxNumericValue": 0.05 }],
+				"categories:performance": ["error", { "minScore": 0.9 }],
+				"categories:accessibility": ["warn", { "minScore": 0.9 }]
+			}
+		},
+		"upload": {
+			"target": "filesystem",
+			"outputDir": "./lighthouse-report"
+		}
+	}
+}

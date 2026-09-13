@@ -43,6 +43,16 @@ test('reduced motion shows the content without waiting for animation', async ({ 
 	const context = await browser.newContext({ reducedMotion: 'reduce' });
 	const page = await context.newPage();
 	await page.goto(`/${CODE}`);
-	await expect(page.getByRole('heading', { name: 'Семья Ивановых' })).toBeInViewport();
+
+	// The greeting sits below the hero, so viewport is the wrong question. What matters
+	// is that the reveal wrapper is already at full strength, with no scroll and no wait.
+	const greeting = page.getByRole('heading', { name: 'Семья Ивановых' });
+	await expect(greeting).toBeVisible();
+	const opacity = await greeting.evaluate((node) => {
+		const wrapper = node.closest('.reveal');
+		return wrapper ? getComputedStyle(wrapper).opacity : null;
+	});
+	expect(opacity).toBe('1');
+
 	await context.close();
 });
